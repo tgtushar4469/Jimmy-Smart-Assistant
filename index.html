@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#0a0a1a" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Jimmy AI" />
+  <title>Jimmy AI — Your Personal Assistant</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Animated Background -->
+  <div class="bg-grid"></div>
+  <div class="particles" id="particles"></div>
+
+  <!-- Main App -->
+  <div class="app-container">
+
+    <!-- Header -->
+    <header class="header">
+      <div class="status-bar">
+        <span class="status-dot" id="statusDot"></span>
+        <span class="status-text" id="statusText">OFFLINE MODE</span>
+      </div>
+      <div class="logo">
+        <span class="logo-j">J</span>IMMY
+        <span class="logo-ai">AI</span>
+      </div>
+      <div class="version">v2.0 FRIDAY CORE</div>
+    </header>
+
+    <!-- Avatar Circle -->
+    <div class="avatar-section">
+      <div class="avatar-ring ring-3"></div>
+      <div class="avatar-ring ring-2"></div>
+      <div class="avatar-ring ring-1"></div>
+      <div class="avatar-core" id="avatarCore">
+        <div class="avatar-face">
+          <div class="eye left-eye"></div>
+          <div class="eye right-eye"></div>
+          <div class="mouth" id="mouthAnim"></div>
+        </div>
+        <div class="scan-line"></div>
+      </div>
+      <div class="avatar-label">
+        <span id="avatarState">Say "Hey Jimmy"</span>
+      </div>
+    </div>
+
+    <!-- Chat Display -->
+    <div class="chat-box" id="chatBox">
+      <div class="chat-message jimmy-msg">
+        <span class="msg-label">JIMMY</span>
+        <p>Hello! Main Jimmy hoon, tumhara personal AI assistant. Mujhe "Hey Jimmy" bolkar activate karo, ya neeche ka mic button press karo. Main tumhari har baat sunne ke liye taiyaar hoon! 😊</p>
+      </div>
+    </div>
+
+    <!-- Voice Waveform -->
+    <div class="waveform" id="waveform">
+      <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
+      <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
+      <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
+    </div>
+
+    <!-- Text Input -->
+    <div class="text-input-area">
+      <input type="text" id="textInput" placeholder="Type your message..." autocomplete="off" />
+      <button class="send-btn" id="sendBtn" onclick="sendTextMessage()">➤</button>
+    </div>
+
+    <!-- Control Buttons -->
+    <div class="controls">
+      <button class="ctrl-btn" id="wakeBtn" onclick="activateJimmy()">
+        <span class="btn-icon">👋</span>
+        <span class="btn-label">Hey Jimmy</span>
+      </button>
+      <button class="ctrl-btn mic-btn" id="micBtn" onclick="toggleListening()">
+        <span class="btn-icon" id="micIcon">🎤</span>
+        <span class="btn-label" id="micLabel">Listen</span>
+      </button>
+      <button class="ctrl-btn" onclick="stopJimmy()">
+        <span class="btn-icon">⏹</span>
+        <span class="btn-label">Stop</span>
+      </button>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+      <span class="qa-title">Quick Commands:</span>
+      <div class="qa-buttons">
+        <button class="qa-btn" onclick="quickCommand('time kya hai')">🕐 Time</button>
+        <button class="qa-btn" onclick="quickCommand('date kya hai')">📅 Date</button>
+        <button class="qa-btn" onclick="quickCommand('weather')">🌤 Weather</button>
+        <button class="qa-btn" onclick="quickCommand('joke sunao')">😄 Joke</button>
+        <button class="qa-btn" onclick="quickCommand('battery status')">🔋 Battery</button>
+        <button class="qa-btn" onclick="quickCommand('calculator')">🔢 Calc</button>
+        <button class="qa-btn" onclick="quickCommand('alarm lagao')">⏰ Alarm</button>
+        <button class="qa-btn" onclick="quickCommand('camera kholo')">📷 Camera</button>
+      </div>
+    </div>
+
+    <!-- Settings Panel -->
+    <div class="settings-panel" id="settingsPanel">
+      <h3>⚙️ Jimmy Settings</h3>
+      <label>API Key (Claude):
+        <input type="password" id="apiKeyInput" placeholder="sk-ant-..." />
+        <button onclick="saveApiKey()">Save</button>
+      </label>
+      <label>Voice Language:
+        <select id="voiceLang">
+          <option value="hi-IN">Hindi</option>
+          <option value="en-IN" selected>English (India)</option>
+          <option value="en-US">English (US)</option>
+        </select>
+      </label>
+      <label>Voice Speed:
+        <input type="range" id="voiceSpeed" min="0.5" max="2" step="0.1" value="0.9" />
+      </label>
+      <label>Voice Pitch:
+        <input type="range" id="voicePitch" min="0.5" max="2" step="0.1" value="1.4" />
+      </label>
+      <button class="save-settings-btn" onclick="saveSettings()">💾 Save Settings</button>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <button class="footer-btn" onclick="toggleSettings()">⚙️ Settings</button>
+      <button class="footer-btn" onclick="clearChat()">🗑 Clear</button>
+      <button class="footer-btn" onclick="testVoice()">🔊 Test Voice</button>
+    </footer>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
